@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { CatDto } from 'src/dto/cat.dto';
 import { Cat } from 'src/models/cat.model';
 
 @Injectable()
@@ -18,19 +19,36 @@ export class CatsService {
   findAll(): Cat[] {
     return this.cats;
   }
-  findDetail(): string {
-    return 'Get detail';
+  findDetail(id: number): Cat {
+    const cat = this.cats.find((item) => item.id === Number(id));
+    if (!cat) {
+      throw new Error(`Cat with id ${id} not found`);
+    }
+    return cat;
   }
-  create(): string {
-    return 'Create cat';
+  create(catData: CatDto): Cat {
+    const newCat = {
+      id: Math.random(),
+      ...catData,
+    };
+    this.cats.push(newCat);
+    return newCat;
   }
-  updateSomething(): string {
-    return 'Update small';
+
+  update(id: number, catDto: CatDto): Cat {
+    console.log({ data: catDto });
+    const index = this.cats.findIndex((item) => item.id === Number(id));
+    if (index === -1) {
+      throw new Error(`Cat with id ${id} not found`);
+    }
+    this.cats = this.cats.map((obj) =>
+      obj.id === Number(id) ? { ...obj, ...catDto } : obj,
+    );
+    return this.cats[index];
   }
-  update(): string {
-    return 'Update Full';
-  }
-  del(): string {
-    return 'Del';
+  del(id: number): Cat[] {
+    const newCats = this.cats.filter((item) => item.id !== Number(id));
+    this.cats = newCats;
+    return this.cats;
   }
 }

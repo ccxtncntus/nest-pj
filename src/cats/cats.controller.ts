@@ -1,9 +1,18 @@
-import { Controller, Delete, Get, Patch, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 // import type { Request } from 'express'
 import { CatsService } from './cats.service';
 import { ResponseData } from 'src/global/globalClass';
 import { HttpStatusEnum, ResponseMessageEnum } from 'src/global/globalEnum';
 import { Cat } from 'src/models/cat.model';
+import { CatDto } from 'src/dto/cat.dto';
 @Controller('cats')
 export class CatsController {
   constructor(private readonly catsService: CatsService) {}
@@ -24,17 +33,17 @@ export class CatsController {
       );
     }
   }
-  @Get('/:id')
-  findDetail(): ResponseData<string> {
+  @Get(':id')
+  findDetail(@Param('id') id: number): ResponseData<Cat> {
     try {
-      return new ResponseData<string>(
-        this.catsService.findDetail(),
+      return new ResponseData<Cat>(
+        this.catsService.findDetail(id),
         HttpStatusEnum.SUCCESS,
         ResponseMessageEnum.SUCCESS,
       );
     } catch (error) {
       console.log(error);
-      return new ResponseData<string>(
+      return new ResponseData<Cat>(
         null,
         HttpStatusEnum.NOT_FOUND,
         ResponseMessageEnum.NOT_FOUND,
@@ -42,67 +51,51 @@ export class CatsController {
     }
   }
   @Post()
-  create(): ResponseData<string> {
+  create(@Body() catDto: CatDto): ResponseData<Cat> {
     try {
-      return new ResponseData<string>(
-        this.catsService.create(),
+      return new ResponseData<Cat>(
+        this.catsService.create(catDto),
         HttpStatusEnum.SUCCESS,
         ResponseMessageEnum.SUCCESS,
       );
     } catch (error) {
       console.log(error);
-      return new ResponseData<string>(
+      return new ResponseData<Cat>(
         null,
         HttpStatusEnum.NOT_FOUND,
         ResponseMessageEnum.NOT_FOUND,
       );
     }
   }
-  @Patch()
-  updateSomething(): ResponseData<string> {
+
+  @Put(':id')
+  update(@Param('id') id: number, @Body() catDto: CatDto): ResponseData<Cat> {
     try {
-      return new ResponseData<string>(
-        this.catsService.updateSomething(),
+      return new ResponseData<Cat>(
+        this.catsService.update(id, catDto),
         HttpStatusEnum.SUCCESS,
         ResponseMessageEnum.SUCCESS,
       );
     } catch (error) {
       console.log(error);
-      return new ResponseData<string>(
+      return new ResponseData<Cat>(
         null,
         HttpStatusEnum.NOT_FOUND,
         ResponseMessageEnum.NOT_FOUND,
       );
     }
   }
-  @Put()
-  update(): ResponseData<string> {
+  @Delete(':id')
+  del(@Param('id') id: number): ResponseData<Cat> {
     try {
-      return new ResponseData<string>(
-        this.catsService.update(),
+      return new ResponseData<Cat>(
+        this.catsService.del(id),
         HttpStatusEnum.SUCCESS,
         ResponseMessageEnum.SUCCESS,
       );
     } catch (error) {
       console.log(error);
-      return new ResponseData<string>(
-        null,
-        HttpStatusEnum.NOT_FOUND,
-        ResponseMessageEnum.NOT_FOUND,
-      );
-    }
-  }
-  @Delete()
-  del(): ResponseData<string> {
-    try {
-      return new ResponseData<string>(
-        this.catsService.del(),
-        HttpStatusEnum.SUCCESS,
-        ResponseMessageEnum.SUCCESS,
-      );
-    } catch (error) {
-      console.log(error);
-      return new ResponseData<string>(
+      return new ResponseData<Cat>(
         null,
         HttpStatusEnum.NOT_FOUND,
         ResponseMessageEnum.NOT_FOUND,
