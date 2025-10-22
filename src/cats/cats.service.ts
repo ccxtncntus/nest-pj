@@ -1,9 +1,22 @@
 import { Injectable } from '@nestjs/common';
+import { Cat } from 'src/models/cat.model';
 
 @Injectable()
 export class CatsService {
-  findAll(): string {
-    return 'This action returns all cats';
+  private cats: Cat[] = [
+    {
+      id: 1,
+      name: 'Tom',
+      age: 3,
+    },
+    {
+      id: 2,
+      name: 'Jerry',
+      age: 4,
+    },
+  ];
+  findAll(): Cat[] {
+    return this.cats;
   }
   findDetail(): string {
     return 'Get detail';

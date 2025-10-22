@@ -1,33 +1,112 @@
-import { Controller, Delete, Get, Patch, Post, Put, Req } from '@nestjs/common';
-import type { Request } from 'express';
+import { Controller, Delete, Get, Patch, Post, Put } from '@nestjs/common';
+// import type { Request } from 'express'
 import { CatsService } from './cats.service';
-
+import { ResponseData } from 'src/global/globalClass';
+import { HttpStatusEnum, ResponseMessageEnum } from 'src/global/globalEnum';
+import { Cat } from 'src/models/cat.model';
 @Controller('cats')
 export class CatsController {
   constructor(private readonly catsService: CatsService) {}
   @Get()
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  findAll(@Req() request: Request): string {
-    return this.catsService.findAll();
+  findAll(): ResponseData<Cat[]> {
+    try {
+      return new ResponseData<Cat[]>(
+        this.catsService.findAll(),
+        HttpStatusEnum.SUCCESS,
+        ResponseMessageEnum.SUCCESS,
+      );
+    } catch (error) {
+      console.log(error);
+      return new ResponseData<Cat[]>(
+        null,
+        HttpStatusEnum.NOT_FOUND,
+        ResponseMessageEnum.NOT_FOUND,
+      );
+    }
   }
   @Get('/:id')
-  findDetail(): string {
-    return this.catsService.findAll();
+  findDetail(): ResponseData<string> {
+    try {
+      return new ResponseData<string>(
+        this.catsService.findDetail(),
+        HttpStatusEnum.SUCCESS,
+        ResponseMessageEnum.SUCCESS,
+      );
+    } catch (error) {
+      console.log(error);
+      return new ResponseData<string>(
+        null,
+        HttpStatusEnum.NOT_FOUND,
+        ResponseMessageEnum.NOT_FOUND,
+      );
+    }
   }
   @Post()
-  create(): string {
-    return this.catsService.create();
+  create(): ResponseData<string> {
+    try {
+      return new ResponseData<string>(
+        this.catsService.create(),
+        HttpStatusEnum.SUCCESS,
+        ResponseMessageEnum.SUCCESS,
+      );
+    } catch (error) {
+      console.log(error);
+      return new ResponseData<string>(
+        null,
+        HttpStatusEnum.NOT_FOUND,
+        ResponseMessageEnum.NOT_FOUND,
+      );
+    }
   }
   @Patch()
-  updateSomething(): string {
-    return this.catsService.updateSomething();
+  updateSomething(): ResponseData<string> {
+    try {
+      return new ResponseData<string>(
+        this.catsService.updateSomething(),
+        HttpStatusEnum.SUCCESS,
+        ResponseMessageEnum.SUCCESS,
+      );
+    } catch (error) {
+      console.log(error);
+      return new ResponseData<string>(
+        null,
+        HttpStatusEnum.NOT_FOUND,
+        ResponseMessageEnum.NOT_FOUND,
+      );
+    }
   }
   @Put()
-  update(): string {
-    return this.catsService.update();
+  update(): ResponseData<string> {
+    try {
+      return new ResponseData<string>(
+        this.catsService.update(),
+        HttpStatusEnum.SUCCESS,
+        ResponseMessageEnum.SUCCESS,
+      );
+    } catch (error) {
+      console.log(error);
+      return new ResponseData<string>(
+        null,
+        HttpStatusEnum.NOT_FOUND,
+        ResponseMessageEnum.NOT_FOUND,
+      );
+    }
   }
   @Delete()
-  del(): string {
-    return this.catsService.del();
+  del(): ResponseData<string> {
+    try {
+      return new ResponseData<string>(
+        this.catsService.del(),
+        HttpStatusEnum.SUCCESS,
+        ResponseMessageEnum.SUCCESS,
+      );
+    } catch (error) {
+      console.log(error);
+      return new ResponseData<string>(
+        null,
+        HttpStatusEnum.NOT_FOUND,
+        ResponseMessageEnum.NOT_FOUND,
+      );
+    }
   }
 }
